@@ -5,7 +5,7 @@ import ControlDcServo as servo
 
 def on_message(client, useradata, message):
     ecoded_message = str(message.payload.decode("utf-8"))
-    #print("received message : ", str(message.payload.decode("utf-8")))
+    print("received message : ", str(message.payload.decode("utf-8")))
     client.data=ecoded_message
     
     
@@ -27,8 +27,8 @@ direction="forward"
 
 while True:
     if(client.data=="UP" or client.data=="RIGHT" or client.data=="LEFT"):
-        print("hello",client.data)
-        control.move(60, direction, client.data, radius=0.6)
+       
+        control.moveWIthMessageInput(client.data,direction)
         pass
     if(client.data=="forward" or direction=="backward"):
          direction=client.data

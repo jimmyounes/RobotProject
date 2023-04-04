@@ -128,11 +128,11 @@ def destroy():
 	GPIO.cleanup()             # Release resource
 
 
-def moveWIthMessageInput(message):
-        speed_set = 60  
+def moveWIthMessageInput(message,direction):
+        speed_set = 100  
         setup()  
         
-        move(speed_set, 'forward', message, 0.8)  
+        move(speed_set, direction, message, 0.8)  
         time.sleep(1.3)
          
 def stop():
