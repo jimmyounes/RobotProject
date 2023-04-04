@@ -41,6 +41,9 @@ class App:
 
         self.btn_up6 = tk.Button(window, text="↑")
         self.btn_down6 = tk.Button(window, text="↓")
+        
+        self.tir = tk.Button(window, text="TIR")
+
         #Commande pour detecter press and release buttons 
         self.btn_up1.bind("<Button-1>", lambda event :self.btn_up1_pressed("UP"))
         self.btn_up1.bind("<ButtonRelease-1>",lambda event :self.btn_up1_pressed("STOP"))
@@ -64,6 +67,9 @@ class App:
         self.btn_up6.bind("<Button-1>",lambda event :self.btn_up1_pressed("CHANNEL15UP"))
         self.btn_down6.bind("<Button-1>",lambda event :self.btn_up1_pressed("CHANNEL15DOWN"))
         
+        self.tir.bind("<Button-1>",lambda event :self.btn_up1_pressed("TIR"))
+        self.tir.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
+
         self.btn_up3.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
         self.btn_down3.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
         self.btn_up4.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
@@ -85,6 +91,8 @@ class App:
         self.btn_right1.place(x=180,y=420)
         self.btn_down1.pack(side=tk.BOTTOM, padx=10)
         self.btn_down1.place(x=100,y=490)
+         
+        self.tir.place(x=450, y=300)
 
         self.btn_up2.pack(side=tk.RIGHT, padx=20)
         self.btn_up2.place(x=250, y=350)
