@@ -30,7 +30,7 @@ def motorStop():#Motor stops
 	#GPIO.output(Motor_B_EN, GPIO.LOW)
     pass
 
-def setup():#Motor initialization
+def setupMotor():#Motor initialization
 	global pwm_A, pwm_B
 	GPIO.setwarnings(False)
 	GPIO.setmode(GPIO.BCM)
@@ -130,7 +130,7 @@ def destroy():
 
 def moveWIthMessageInput(message,direction):
         speed_set = 100  
-        setup()  
+        setupMotor()  
         
         move(speed_set, direction, message, 0.8)  
         time.sleep(1.3)

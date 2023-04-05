@@ -3,6 +3,11 @@ import tkinter as tk
 from PIL import Image, ImageTk
 import time 
 from MQTTController import publishMessageOnTopic
+import socket
+import base64
+import cv2
+import numpy as np
+
 class App:
     def __init__(self, window, window_title, video_source=0):
         window.geometry("1000x600")
@@ -27,6 +32,8 @@ class App:
         self.btn_left1 = tk.Button(window, text="←")
         self.btn_right1 = tk.Button(window, text="→")
         
+        self.btn_photo = tk.Button(window, text="PHOTO")
+
         self.btn_up2 = tk.Button(window, text="forward")
         self.btn_down2 = tk.Button(window, text="backward")
         
@@ -70,6 +77,11 @@ class App:
         self.tir.bind("<Button-1>",lambda event :self.btn_up1_pressed("TIR"))
         self.tir.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
 
+
+        self.btn_photo.bind("<Button-1>",lambda event :self.btn_photo_pressed("PHOTO"))
+        self.btn_photo.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
+
+
         self.btn_up3.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
         self.btn_down3.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
         self.btn_up4.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
@@ -78,7 +90,7 @@ class App:
         self.btn_down5.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
         self.btn_up6.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
         self.btn_down6.bind("<ButtonRelease-1>",lambda event : self.btn_up1_pressed("STOPPED"))
-
+      
 
         self.my_label = tk.Label(window, text="Hello, World!")
         self.my_label.pack(padx=500, pady=500)
@@ -92,6 +104,8 @@ class App:
         self.btn_down1.pack(side=tk.BOTTOM, padx=10)
         self.btn_down1.place(x=100,y=490)
          
+        self.btn_photo.place(x=500,y=300)
+
         self.tir.place(x=450, y=300)
 
         self.btn_up2.pack(side=tk.RIGHT, padx=20)
@@ -133,9 +147,32 @@ class App:
     def btn_up1_pressed(self,message):
         # Call your publishMessageOnTopic function here
         publishMessageOnTopic(message,"Walt/mouvement")
-           
+    def btn_photo_pressed(self,message):
+        publishMessageOnTopic(message,"Walt/mouvement")
+        # Define the local address and port to listen on
+        local_address = "173.20.10.9"
+        local_port = 12345
 
+# Create a UDP socket and bind it to the local address and port
+        socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        socket.bind((local_address, local_port))
 
+# Receive the image data over the socket
+        data, address = socket.recvfrom(65536)
+
+# Decode the image data from a base64 string to bytes
+        image_data = base64.b64decode(data)
+
+# Load the image from the bytes data
+        image = cv2.imdecode(np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR)
+
+# Show the image in a window
+        cv2.imshow("Received Image", image)
+        cv2.waitKey(0)
+
+# Close the window and the socket
+        cv2.destroyAllWindows()
+        socket.close()
 class MyVideoCapture:
     def __init__(self, video_source=0):
         # Ouverture de la capture vidéo
